@@ -23,7 +23,9 @@ import (
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/crossplane-contrib/provider-jet-kafka/config/null"
+	"github.com/crossplane-contrib/provider-jet-kafka/config/k_acl"
+	"github.com/crossplane-contrib/provider-jet-kafka/config/k_quota"
+	"github.com/crossplane-contrib/provider-jet-kafka/config/k_topic"
 )
 
 const (
@@ -44,11 +46,17 @@ func GetProvider() *tjconfig.Provider {
 	}
 
 	pc := tjconfig.NewProviderWithSchema([]byte(providerSchema), resourcePrefix, modulePath,
-		tjconfig.WithDefaultResourceFn(defaultResourceFn))
+		tjconfig.WithDefaultResourceFn(defaultResourceFn), tjconfig.WithIncludeList([]string{
+			"kafka_acl$",
+			"kafka_quota$",
+			"kafka_topic$",
+		}))
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		// add custom config functions
-		null.Configure,
+		k_acl.Configure,
+		k_quota.Configure,
+		k_topic.Configure,
 	} {
 		configure(pc)
 	}

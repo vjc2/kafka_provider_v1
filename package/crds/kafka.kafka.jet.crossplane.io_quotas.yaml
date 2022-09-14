@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: resources.null.kafka.jet.crossplane.io
+  name: quotas.kafka.kafka.jet.crossplane.io
 spec:
-  group: null.kafka.jet.crossplane.io
+  group: kafka.kafka.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - kafkajet
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    kind: Quota
+    listKind: QuotaList
+    plural: quotas
+    singular: quota
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API
+        description: Quota is the Schema for the Quotas API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: QuotaSpec defines the desired state of Quota
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,13 +63,20 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
+                  config:
                     additionalProperties:
-                      type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
+                      type: number
+                    description: A map of string k/v properties.
                     type: object
+                  entityName:
+                    description: The name of the entity
+                    type: string
+                  entityType:
+                    description: The type of the entity (client-id, user, ip)
+                    type: string
+                required:
+                - entityName
+                - entityType
                 type: object
               providerConfigRef:
                 default:
@@ -168,7 +175,7 @@ spec:
             - forProvider
             type: object
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: QuotaStatus defines the observed state of Quota.
             properties:
               atProvider:
                 properties:

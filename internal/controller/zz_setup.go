@@ -21,7 +21,9 @@ import (
 
 	"github.com/crossplane/terrajet/pkg/controller"
 
-	resource "github.com/crossplane-contrib/provider-jet-kafka/internal/controller/null/resource"
+	acl "github.com/crossplane-contrib/provider-jet-kafka/internal/controller/kafka/acl"
+	quota "github.com/crossplane-contrib/provider-jet-kafka/internal/controller/kafka/quota"
+	topic "github.com/crossplane-contrib/provider-jet-kafka/internal/controller/kafka/topic"
 	providerconfig "github.com/crossplane-contrib/provider-jet-kafka/internal/controller/providerconfig"
 )
 
@@ -29,7 +31,9 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		acl.Setup,
+		quota.Setup,
+		topic.Setup,
 		providerconfig.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package null
+package k_quota
 
 import (
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
@@ -22,7 +22,7 @@ import (
 
 // Configure configures the null group
 func Configure(p *tjconfig.Provider) {
-	p.AddResourceConfigurator("null_resource", func(r *tjconfig.Resource) {
+	p.AddResourceConfigurator("kafka_quota", func(r *tjconfig.Resource) {
 		r.ExternalName = tjconfig.IdentifierFromProvider
 	})
 }
